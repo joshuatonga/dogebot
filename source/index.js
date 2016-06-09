@@ -87,14 +87,14 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
   }
   else if (regex.isAskingWebsiteDown(message)) {
     var url = regex.getURL(message);
+    console.log('[!] Got url: ' + url);
 
     // Check if the website is up
     http.get(url, function(res) {
-      rtm.sendMessage('Nope. The website is up.');
+      rtm.sendMessage('Nope. The website is up.', channel);
     }).on('error', function(error) {
-      rtm.sendMessage('Yup. The website is down.');
+      rtm.sendMessage('Yup. The website is down.', channel);
     });
   }
-
 
 });
