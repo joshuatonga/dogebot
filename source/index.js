@@ -2,6 +2,8 @@
 // Packages
 //*************************************
 
+var http = require('http');
+
 // Slack SDK
 var Slack = require('@slack/client');
 var RTMClient = Slack.RtmClient;
@@ -13,15 +15,25 @@ var RTM_EVENTS = Slack.RTM_EVENTS;
 // Global variables
 //*************************************
 
-var token = process.env.SLACK_TOKEN || '';
+var TOKEN = process.env.SLACK_TOKEN || '';
+var PORT = Number(process.env.PORT || 8888);
 
 
+// Run a web server
+var server = http.createServer(function(request, response) {
+  response.writeHead(200, {"Content-Type": "text/plain"});
+  response.write("MUCH BOT! SO WOW!");
+  response.end();
+});
 
+server.listen(PORT, function() {
+  console.log('[+] Web server running on port: ' + PORT);
+});
 
 
 
 // start the websocket
-var rtm = new RTMClient(token, {logLevel: 'debug'});
+var rtm = new RTMClient(TOKEN, {logLevel: 'debug'});
 rtm.start();
 
 rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
@@ -31,9 +43,6 @@ rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
 
 // Listen for messages in channel
 rtm.on(RTM_EVENTS.MESSAGE, function(data) {
-  console.log('[!] Logging new data........');
-  console.log(data);
-
   // Perform validation of the data
   if (!data.text || data.subtype === 'bot_message')
     return;
