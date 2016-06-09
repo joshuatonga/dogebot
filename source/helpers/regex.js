@@ -3,7 +3,7 @@ var Regex = function() {
 };
 
 Regex.prototype.isAskingWebsiteDown = function(string) {
-  return this.urlRegex.test(string));
+  return this.urlRegex.test(string);
 };
 
 Regex.prototype.getURL = function(string) {
