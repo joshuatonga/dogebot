@@ -31,6 +31,7 @@ rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
 
 // Listen for messages in channel
 rtm.on(RTM_EVENTS.MESSAGE, function(data) {
+  console.log('[!] Logging new data........');
   console.log(data);
 
   // Perform validation of the data
@@ -41,8 +42,9 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
   var message = data.text;
   var channel = data.channel;
 
+  console.log("[!] Message: " + message);
 
-  if (message == 'test bot') {
+  if (message === 'test bot') {
     rtm.sendMessage('WOW!', channel);
   }
 
