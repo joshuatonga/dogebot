@@ -1,22 +1,14 @@
 var Regex = function() {
-  this.urlRegex = new RegExp("is ([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)? down\?");
+  this.urlRegex = new RegExp("([a-zA-Z0-9]+\.[a-zA-Z]{2,3}(?=>))(?=.*down\?)");
 };
 
 Regex.prototype.isAskingWebsiteDown = function(string) {
-  if (this.urlRegex.test(string))
-    return true;
-  else
-    return false;
+  return this.urlRegex.test(string));
 };
 
 Regex.prototype.getURL = function(string) {
-  var resultURL = this.urlRegex.exec(string);
-  var domain = resultURL[1];
-  var tld = resultURL[2];
-
-  var url = domain + tld;
-
-  return url;
+  var url = this.urlRegex.exec(string);
+  return url[0];
 };
 
 module.exports = Regex;

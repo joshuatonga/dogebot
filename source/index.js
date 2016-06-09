@@ -90,9 +90,9 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
 
     // Check if the website is up
     http.get(url, function(res) {
-      rtm.sendMessage('The website is up.');
+      rtm.sendMessage('Nope. The website is up.');
     }).on('error', function(error) {
-      rtm.sendMessage('The website is down.');
+      rtm.sendMessage('Yup. The website is down.');
     });
   }
 
