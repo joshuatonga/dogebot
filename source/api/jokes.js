@@ -4,9 +4,11 @@
 var request = require('request');
 
 
+
 // Create class about jokes for random jokes and Chuck Norris jokes
 var Jokes = function() {
   this.randomJokeURL = 'http://tambal.azurewebsites.net/joke/random';
+  this.chuckNorrisFactURL = 'https://api.chucknorris.io/jokes/random';
 };
 
 
@@ -29,7 +31,28 @@ Jokes.prototype.getRandomJoke = function(callback) {
           response.statusCode);
     }
   }); // end of request
+}; // end of getRandomJoke
 
+
+// TODO: Convert this function to use Promises instead.
+Jokes.prototype.getNorrisFact = function(callback) {
+  request(this.chuckNorrisFactURL, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      var fact = JSON.parse(body).value;
+
+      console.log('[!] Got a Chuck Norris fact!!!');
+      console.log(fact);
+
+      // Call the callback function with the fact
+      callback(fact);
+
+      return;
+    } else {
+      // Error!
+      console.log('[!] Error: ' + error + ' with a status code of: ' + 
+          response.statusCode);
+    }
+  });
 };
 
 module.exports = Jokes;
