@@ -5,7 +5,7 @@ var request = require('request');
 
 
 
-// Create class about jokes for random jokes and Chuck Norris jokes
+// Class about jokes for random jokes and Chuck Norris jokes
 var Jokes = function() {
   this.randomJokeURL = 'http://tambal.azurewebsites.net/joke/random';
   this.chuckNorrisFactURL = 'https://api.chucknorris.io/jokes/random';

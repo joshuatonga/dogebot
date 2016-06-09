@@ -12,6 +12,7 @@ var RTM_EVENTS = Slack.RTM_EVENTS;
 
 // Custom
 var Jokes = require('./api/jokes');
+var Regex = require('./helpers/regex');
 
 
 
@@ -24,6 +25,7 @@ var TOKEN = process.env.SLACK_TOKEN || '';
 var PORT = Number(process.env.PORT || 8888);
 
 var jokes = new Jokes();
+var regex = new Regex();
 
 
 
@@ -81,6 +83,16 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
   else if (message === 'do you know chuck norris?') {
     jokes.getNorrisFact(function(fact) {
       rtm.sendMessage(fact, channel);
+    });
+  }
+  else if (regex.isAskingWebsiteDown(message)) {
+    var url = regex.getURL(message);
+
+    // Check if the website is up
+    http.get(url, function(res) {
+      rtm.sendMessage('The website is up.');
+    }).on('error', function(error) {
+      rtm.sendMessage('The website is down.');
     });
   }
 
