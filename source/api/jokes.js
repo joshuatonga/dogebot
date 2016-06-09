@@ -10,6 +10,7 @@ var Jokes = function() {
 };
 
 
+// TODO: Convert this function to use Promises instead.
 Jokes.prototype.getRandomJoke = function(callback) {
   request(this.randomJokeURL, function(error, response, body) {
     if (!error && response.statusCode === 200) {
