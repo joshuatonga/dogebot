@@ -18,7 +18,10 @@ Jokes.prototype.getRandomJoke = function(callback) {
       console.log('[!] Got a random joke!!!');
       console.log(joke);
 
+      // Call the callback function with the joke
       callback(joke);
+
+      return;
     } else {
       // Error!
       console.log('[!] Error: ' + error + ' with a status code of: ' + 
