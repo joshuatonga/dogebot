@@ -1,3 +1,7 @@
+// TODO: Implement user typing
+// TODO: Use promises instead of callback
+// TODO: Add tests. (It should be tdd but I don't have that much time.)
+
 //*************************************
 // Packages
 //*************************************
@@ -13,19 +17,22 @@ var RTM_EVENTS = Slack.RTM_EVENTS;
 // Custom
 var Jokes = require('./api/jokes');
 var Regex = require('./helpers/regex');
+var Wolfram = require('./helpers/wolfram');
 
 
 
 
 //*************************************
-// Global variables
+// Variables
 //*************************************
 
-var TOKEN = process.env.SLACK_TOKEN || '';
+var SLACK_TOKEN = process.env.SLACK_TOKEN || '';
+var WOLFRAM_TOKEN = process.env.WOLFRAM_TOKEN || '';
 var PORT = Number(process.env.PORT || 8888);
 
 var jokes = new Jokes();
 var regex = new Regex();
+var wolfram = new Wolfram(WOLFRAM_TOKEN);
 
 
 
@@ -44,7 +51,7 @@ server.listen(PORT, function() {
 
 
 // Start the websocket
-var rtm = new RTMClient(TOKEN, {logLevel: 'debug'});
+var rtm = new RTMClient(SLACK_TOKEN, {logLevel: 'debug'});
 rtm.start();
 
 rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
@@ -87,7 +94,6 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
   }
   else if (regex.isAskingWebsiteDown(message)) {
     var url = regex.getURL(message);
-    console.log('[!] Got url: ' + url);
 
     // Check if the website is up
     http.get(url, function(res) {
@@ -95,6 +101,15 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
     }).on('error', function(error) {
       rtm.sendMessage('Yup. The website is down.', channel);
     });
+  }
+  else if (regex.isAskingWord(message)) {
+    var word = regex.getWord(message);
+
+    // Get the definition
+    wolfram.define(word, function(definition) {
+      rtm.sendMessage(definition, channel);
+    });
+    
   }
 
 });
