@@ -1,3 +1,11 @@
+/**
+ *
+ * Wrapper class for the jokes API
+ *
+ * */
+
+
+
 //*************************************
 // Packages
 //*************************************
@@ -5,7 +13,6 @@ var request = require('request');
 
 
 
-// Class about jokes for random jokes and Chuck Norris jokes
 var Jokes = function() {
   this.randomJokeURL = 'http://tambal.azurewebsites.net/joke/random';
   this.chuckNorrisFactURL = 'https://api.chucknorris.io/jokes/random';

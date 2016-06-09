@@ -1,5 +1,5 @@
-// TODO: Implement user typing
 // TODO: Use promises instead of callback
+// TODO: Implement user typing
 // TODO: Add tests. (It should be tdd but I don't have that much time.)
 
 //*************************************
@@ -111,5 +111,4 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
     });
     
   }
-
 });
