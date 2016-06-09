@@ -10,7 +10,7 @@ var Jokes = function() {
 };
 
 
-Jokes.prototype.getRandomJoke = function() {
+Jokes.prototype.getRandomJoke = function(callback) {
   request(this.randomJokeURL, function(error, response, body) {
     if (!error && response.statusCode === 200) {
       var joke = JSON.parse(body).joke;
@@ -18,7 +18,7 @@ Jokes.prototype.getRandomJoke = function() {
       console.log('[!] Got a random joke!!!');
       console.log(joke);
 
-      return joke;
+      callback(joke);
     } else {
       // Error!
       console.log('[!] Error: ' + error + ' with a status code of: ' + 

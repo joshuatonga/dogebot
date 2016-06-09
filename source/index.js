@@ -68,8 +68,9 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
   // If it hears 'tell a joke', it returns a random joke 
   // (preferrably from a public API, and not statically coded)
   if (message === 'tell a joke') {
-    var joke = jokes.getRandomJoke();
-    rtm.sendMessage(joke, channel);
+    jokes.getRandomJoke(function(joke) {
+      rtm.sendMessage(joke, channel);
+    });
   }
 
 });
