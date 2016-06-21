@@ -16,8 +16,8 @@ var RTM_EVENTS = Slack.RTM_EVENTS;
 
 // Custom
 var Jokes = require('./api/jokes');
+var Wolfram = require('./api/wolfram');
 var Regex = require('./helpers/regex');
-var Wolfram = require('./helpers/wolfram');
 
 
 
@@ -61,7 +61,6 @@ rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
 
 
 
-// Listen for messages in channel
 rtm.on(RTM_EVENTS.MESSAGE, function(data) {
   // Perform validation of the data
   if (!data.text || data.subtype === 'bot_message')
@@ -81,14 +80,13 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
   //      the website is actually active or not
   // - if it hears '@dogebot, what is ____' it should try to get results from 
   //      the Wolfram|Alpha public API.
-  // )
   if (message === 'tell a joke') {
-    jokes.getRandomJoke(function(joke) {
+    jokes.getRandomJoke().then(joke => {
       rtm.sendMessage(joke, channel);
     });
   } 
   else if (message === 'do you know chuck norris?') {
-    jokes.getNorrisFact(function(fact) {
+    jokes.getNorrisFact().then(fact => {
       rtm.sendMessage(fact, channel);
     });
   }
@@ -106,9 +104,8 @@ rtm.on(RTM_EVENTS.MESSAGE, function(data) {
     var word = regex.getWord(message);
 
     // Get the definition
-    wolfram.define(word, function(definition) {
+    wolfram.define(word).then(definition => {
       rtm.sendMessage(definition, channel);
     });
-    
   }
-});
+}); // end of RTM_EVENTS.MESSAGE

@@ -6,10 +6,9 @@ var Client = require('node-wolfram');
 
 
 
-
 /** 
  *
- * A helper class for making calls on the api of Wolfram Alpha
+ * A wrapper class for making calls on the api of Wolfram Alpha
  *
  * */
 var Wolfram = function(wolfram_token) {
@@ -19,12 +18,19 @@ var Wolfram = function(wolfram_token) {
 Wolfram.prototype.define = function(word, callback) {
   var query = 'define ' + word;
 
-  this.wolfram.query(query, function(error, result) {
+  // Support callback for backward compatibility
+  callback = callback || function() {};
 
-    if (error) {
-      console.log('[!] Error: ' + error);
-      return;
-    } else {
+  return new Promise((resolve, reject) => {
+    this.wolfram.query(query, function(error, result) {
+      if (error) {
+        console.log('[!] Error: ' + error);
+
+        reject(error);
+        return callback(error);
+      } 
+
+      // Extract the result
       for(var a=0; a < result.queryresult.pod.length; a++) {
         var pod = result.queryresult.pod[a];
         console.log(pod.$.title,": ");
@@ -34,14 +40,16 @@ Wolfram.prototype.define = function(word, callback) {
 
           for(var c=0; c < subpod.plaintext.length; c++) {
             var text = subpod.plaintext[c];
-            callback(text);
+
+            // Got the result. Resolve or call the callback
+            resolve(text);
+            return callback(null, text);
           } // end of c loop
         } // end of b loop
       } // end of a loop
-    }
 
-  }); // end of wolfram query
-
-};
+    }); // end of wolfram query
+  }); // end of Promise
+}; // end of define
 
 module.exports = Wolfram;
